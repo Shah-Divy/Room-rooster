@@ -1,0 +1,13 @@
+.auth-links {
+  text-align: right;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  background-color: #F0ECE3;
+}
+
+.separator {
+  border-left: 2px solid #596E79;
+  height: 20px;
+}
