@@ -173,6 +173,15 @@ app.get("/details/:id/image", async (req, resp) => {
     }
 });
 
+app.get("/details", async (req, resp) => {
+    try {
+        let details = await Detail.find();
+        resp.send(details);
+    } catch (error) {
+        resp.status(500).send({ error: 'Failed to retrieve details' });
+    }
+});
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
