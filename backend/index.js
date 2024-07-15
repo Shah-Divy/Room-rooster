@@ -136,7 +136,6 @@ app.post("/login", async (req, resp) => {
     }
 });
 
-// New route for adding details with image upload
 app.post("/details", upload.single('image'), async (req, resp) => {
     try {
         let detail = new Detail({
@@ -155,20 +154,6 @@ app.post("/details", upload.single('image'), async (req, resp) => {
     }
 });
 
-// Route to retrieve an image by ID
-app.get("/details/:id/image", async (req, resp) => {
-    try {
-        let detail = await Detail.findById(req.params.id);
-        if (detail && detail.image && detail.image.data) {
-            resp.set("Content-Type", detail.image.contentType);
-            resp.send(detail.image.data);
-        } else {
-            resp.status(404).send({ error: 'Image not found' });
-        }
-    } catch (error) {
-        resp.status(500).send({ error: 'Failed to retrieve image' });
-    }
-});
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
