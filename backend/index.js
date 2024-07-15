@@ -20,7 +20,7 @@ app.get('/home', (req, res) => {
     res.send('api running');
 });
 
-app.post("/registers",async (req,resp)=>{
+app.post("/Registers",async (req,resp)=>{
      let user= new User(req.body);
      let result =await user.save();
      result = result.toObject();
