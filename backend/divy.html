@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Details</title>
+</head>
+<body>
+    <div id="details-container"></div>
+
+    <script>
+        async function fetchDetails() {
+            try {
+                const response = await fetch('http://room-rooster.vercel.app/details');
+                const details = await response.json();
+                const container = document.getElementById('details-container');
+                
+                details.forEach(detail => {
+                    const detailDiv = document.createElement('div');
+                    const name = document.createElement('h2');
+                    const price = document.createElement('p');
+                    const description = document.createElement('p');
+                    const image = document.createElement('img');
+
+                    name.textContent = detail.name;
+                    price.textContent = `Price: ${detail.price}`;
+                    description.textContent = detail.description;
+                    image.src = detail.image;
+                    image.alt = detail.name;
+                    image.style.maxWidth = '300px';
+
+                    detailDiv.appendChild(name);
+                    detailDiv.appendChild(price);
+                    detailDiv.appendChild(description);
+                    detailDiv.appendChild(image);
+                    container.appendChild(detailDiv);
+                });
+            } catch (error) {
+                console.error('Error fetching details:', error);
+            }
+        }
+
+        fetchDetails();
+    </script>
+</body>
+</html>
