@@ -250,6 +250,7 @@ app.get("/details", async (req, resp) => {
                 name: detail.name,
                 price: detail.price,
                 description: detail.description,
+                phoneNumber: detail.phoneNumber,
                 image: detail.image ? `data:${detail.image.contentType};base64,${detail.image.data.toString('base64')}` : null
             };
         });
