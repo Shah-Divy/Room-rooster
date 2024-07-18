@@ -14,15 +14,14 @@
 //         required: true
 //     },
 //     image: {
-//         type: String,
-//         required: true
+//         data: Buffer,
+//         contentType: String
 //     }
 // });
 
 // const Detail = mongoose.model('Detail', detailSchema);
 
 // module.exports = Detail;
-
 
 
 const mongoose = require('mongoose');
@@ -43,6 +42,10 @@ const detailSchema = new mongoose.Schema({
     image: {
         data: Buffer,
         contentType: String
+    },
+    phoneNumber: {
+        type: String,
+        required: true
     }
 });
 

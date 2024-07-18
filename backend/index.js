@@ -202,12 +202,30 @@ app.post("/login", async (req, resp) => {
 });
 
 // New route for adding details with image upload
+// app.post("/details", upload.single('image'), async (req, resp) => {
+//     try {
+//         let detail = new Detail({
+//             name: req.body.name,
+//             price: req.body.price,
+//             description: req.body.description,
+//             image: {
+//                 data: req.file.buffer,
+//                 contentType: req.file.mimetype
+//             }
+//         });
+//         let result = await detail.save();
+//         resp.send(result);
+//     } catch (error) {
+//         resp.status(500).send({ error: 'Failed to save detail' });
+//     }
+// });
 app.post("/details", upload.single('image'), async (req, resp) => {
     try {
         let detail = new Detail({
             name: req.body.name,
             price: req.body.price,
             description: req.body.description,
+            phoneNumber: req.body.phoneNumber,
             image: {
                 data: req.file.buffer,
                 contentType: req.file.mimetype
@@ -219,6 +237,8 @@ app.post("/details", upload.single('image'), async (req, resp) => {
         resp.status(500).send({ error: 'Failed to save detail' });
     }
 });
+
+
 
  // Route to retrieve all details
 app.get("/details", async (req, resp) => {
