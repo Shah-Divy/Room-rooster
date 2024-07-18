@@ -20,11 +20,13 @@
                     const name = document.createElement('h2');
                     const price = document.createElement('p');
                     const description = document.createElement('p');
+                    const phoneNumber = document.createElement('h2');
                     const image = document.createElement('img');
 
                     name.textContent = detail.name;
                     price.textContent = `Price: ${detail.price}`;
                     description.textContent = detail.description;
+                    phoneNumber.textContent = detail.phoneNumber;
                     image.src = detail.image;
                     image.alt = detail.name;
                     image.style.maxWidth = '300px';
@@ -32,6 +34,7 @@
                     detailDiv.appendChild(name);
                     detailDiv.appendChild(price);
                     detailDiv.appendChild(description);
+                    detailDiv.appendChild(phoneNumber);
                     detailDiv.appendChild(image);
                     container.appendChild(detailDiv);
                 });
