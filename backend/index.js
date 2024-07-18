@@ -220,6 +220,25 @@ app.post("/details", upload.single('image'), async (req, resp) => {
     }
 });
 
+ // Route to retrieve all details
+app.get("/details", async (req, resp) => {
+    try {
+        let details = await Detail.find();
+        let formattedDetails = details.map(detail => {
+            return {
+                _id: detail._id,
+                name: detail.name,
+                price: detail.price,
+                description: detail.description,
+                image: detail.image ? `data:${detail.image.contentType};base64,${detail.image.data.toString('base64')}` : null
+            };
+        });
+        resp.send(formattedDetails);
+    } catch (error) {
+        resp.status(500).send({ error: 'Failed to retrieve details' });
+    }
+});
+
 // Route to retrieve an image by ID
 app.get("/details/:id/image", async (req, resp) => {
     try {
