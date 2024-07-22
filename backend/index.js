@@ -172,6 +172,7 @@ app.get('/home', (req, res) => {
     res.send('API running');
 });
 
+// api for the Sign-up
 app.post("/register", async (req, resp) => {
     try {
         let user = new User(req.body);
@@ -184,6 +185,8 @@ app.post("/register", async (req, resp) => {
     }
 });
 
+
+// api for the login
 app.post("/login", async (req, resp) => {
     try {
         if (req.body.password && req.body.email) {
@@ -201,24 +204,7 @@ app.post("/login", async (req, resp) => {
     }
 });
 
-// New route for adding details with image upload
-// app.post("/details", upload.single('image'), async (req, resp) => {
-//     try {
-//         let detail = new Detail({
-//             name: req.body.name,
-//             price: req.body.price,
-//             description: req.body.description,
-//             image: {
-//                 data: req.file.buffer,
-//                 contentType: req.file.mimetype
-//             }
-//         });
-//         let result = await detail.save();
-//         resp.send(result);
-//     } catch (error) {
-//         resp.status(500).send({ error: 'Failed to save detail' });
-//     }
-// });
+//api to insert all the details 
 app.post("/details", upload.single('image'), async (req, resp) => {
     try {
         let detail = new Detail({
@@ -241,9 +227,7 @@ app.post("/details", upload.single('image'), async (req, resp) => {
     }
 });
 
-
-
- // Route to retrieve all details
+//api to retrive all the details from the db
 app.get("/details", async (req, resp) => {
     try {
         let details = await Detail.find();
@@ -266,6 +250,7 @@ app.get("/details", async (req, resp) => {
     }
 });
 
+// api for the particular details from the id
 app.get("/details/:id", async (req, resp) => {
     try {
         let detail = await Detail.findById(req.params.id);
@@ -288,22 +273,6 @@ app.get("/details/:id", async (req, resp) => {
         resp.status(500).send({ error: 'Failed to retrieve detail' });
     }
 });
-
-
-// Route to retrieve an image by ID
-// app.get("/details/:id/image", async (req, resp) => {
-//     try {
-//         let detail = await Detail.findById(req.params.id);
-//         if (detail && detail.image && detail.image.data) {
-//             resp.set("Content-Type", detail.image.contentType);
-//             resp.send(detail.image.data);
-//         } else {
-//             resp.status(404).send({ error: 'Image not found' });
-//         }
-//     } catch (error) {
-//         resp.status(500).send({ error: 'Failed to retrieve image' });
-//     }
-// });
 
 // Search endpoint
 app.get("/search", async (req, resp) => {
