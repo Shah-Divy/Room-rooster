@@ -226,6 +226,9 @@ app.post("/details", upload.single('image'), async (req, resp) => {
             price: req.body.price,
             description: req.body.description,
             phoneNumber: req.body.phoneNumber,
+            sqft: req.body.sqft,
+            bed: req.body.bed,
+            bath: req.body.bath,
             image: {
                 data: req.file.buffer,
                 contentType: req.file.mimetype
@@ -251,6 +254,9 @@ app.get("/details", async (req, resp) => {
                 price: detail.price,
                 description: detail.description,
                 phoneNumber: detail.phoneNumber,
+                sqft: detail.sqft,
+                bed: detail.bed,
+                bath: detail.bath,
                 image: detail.image ? `data:${detail.image.contentType};base64,${detail.image.data.toString('base64')}` : null
             };
         });

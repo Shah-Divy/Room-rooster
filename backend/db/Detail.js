@@ -46,7 +46,20 @@ const detailSchema = new mongoose.Schema({
     phoneNumber: {
         type: String,
         required: true
+    },
+    sqft: {
+        type: Number,
+        required: true
+    },
+    bed: {
+        type: Number,
+        required: true
+    },
+    bath: {
+        type: Number,
+        required: true
     }
+
 });
 
 const Detail = mongoose.model('Detail', detailSchema);
