@@ -266,20 +266,44 @@ app.get("/details", async (req, resp) => {
     }
 });
 
-// Route to retrieve an image by ID
-app.get("/details/:id/image", async (req, resp) => {
+app.get("/details/:id", async (req, resp) => {
     try {
         let detail = await Detail.findById(req.params.id);
-        if (detail && detail.image && detail.image.data) {
-            resp.set("Content-Type", detail.image.contentType);
-            resp.send(detail.image.data);
-        } else {
-            resp.status(404).send({ error: 'Image not found' });
+        if (!detail) {
+            return resp.status(404).send({ error: 'Detail not found' });
         }
+        let formattedDetail = {
+            _id: detail._id,
+            name: detail.name,
+            price: detail.price,
+            description: detail.description,
+            phoneNumber: detail.phoneNumber,
+            sqft: detail.sqft,
+            bed: detail.bed,
+            bath: detail.bath,
+            image: detail.image ? `data:${detail.image.contentType};base64,${detail.image.data.toString('base64')}` : null
+        };
+        resp.send(formattedDetail);
     } catch (error) {
-        resp.status(500).send({ error: 'Failed to retrieve image' });
+        resp.status(500).send({ error: 'Failed to retrieve detail' });
     }
 });
+
+
+// Route to retrieve an image by ID
+// app.get("/details/:id/image", async (req, resp) => {
+//     try {
+//         let detail = await Detail.findById(req.params.id);
+//         if (detail && detail.image && detail.image.data) {
+//             resp.set("Content-Type", detail.image.contentType);
+//             resp.send(detail.image.data);
+//         } else {
+//             resp.status(404).send({ error: 'Image not found' });
+//         }
+//     } catch (error) {
+//         resp.status(500).send({ error: 'Failed to retrieve image' });
+//     }
+// });
 
 // Search endpoint
 app.get("/search", async (req, resp) => {
