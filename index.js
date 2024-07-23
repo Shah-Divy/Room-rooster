@@ -431,6 +431,7 @@ app.post("/register", async (req, resp) => {
         delete result.password;
         resp.send(result);
     } catch (error) {
+        console.error('Error registering user:', error);
         resp.status(500).send({ error: 'Failed to register user' });
     }
 });
@@ -449,6 +450,7 @@ app.post("/login", async (req, resp) => {
             resp.status(400).send({ result: 'Email and password are required' });
         }
     } catch (error) {
+        console.error('Error logging in user:', error);
         resp.status(500).send({ error: 'Failed to login user' });
     }
 });
@@ -472,6 +474,7 @@ app.post("/details", upload.single('image'), async (req, resp) => {
         let result = await detail.save();
         resp.send(result);
     } catch (error) {
+        console.error('Error saving detail:', error);
         resp.status(500).send({ error: 'Failed to save detail' });
     }
 });
@@ -523,6 +526,7 @@ app.get("/details/:id", async (req, resp) => {
         };
         resp.send(formattedDetail);
     } catch (error) {
+        console.error('Error retrieving detail:', error);
         resp.status(500).send({ error: 'Failed to retrieve detail' });
     }
 });
@@ -548,6 +552,7 @@ app.get("/search", async (req, resp) => {
         let results = await Detail.find(searchCriteria);
         resp.send(results);
     } catch (error) {
+        console.error('Error searching details:', error);
         resp.status(500).send({ error: 'Failed to search details' });
     }
 });
