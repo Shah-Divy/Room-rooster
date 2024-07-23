@@ -303,7 +303,7 @@ app.post("/details", upload.single('image'), async (req, resp) => {
 // });
 app.get('/details', async (req, resp) => {
     try {
-        let details = await Detail.find();
+        let details = await Detail.findOne();
         let formattedDetails = details.map(detail => {
             return {
                 _id: detail._id,
