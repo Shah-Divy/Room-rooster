@@ -177,16 +177,13 @@
 // });
 
 
-
-
 const express = require('express');
-const cors = require("cors");
+const cors = require('cors');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const multer = require('multer');
-require('./db/config');
-const User = require("./db/User");
-const Detail = require("./db/Detail");
+const User = require('./db/User');
+const Detail = require('./db/Detail');
 
 dotenv.config();
 
@@ -196,11 +193,25 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
 app.use(cors());
 
-// Configure multer for file uploads
+const connectDB = async () => {
+    try {
+        await mongoose.connect(process.env.DBHOST, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        });
+        console.log('MongoDB connected');
+    } catch (error) {
+        console.error('MongoDB connection error:', error);
+        process.exit(1); // Exit process with failure
+    }
+};
+
+connectDB();
+
 const storage = multer.memoryStorage();
-const upload = multer({ 
+const upload = multer({
     storage: storage,
-    limits: { fileSize: 10 * 1024 * 1024 } // 10 MB file size limit
+    limits: { fileSize: 10 * 1024 * 1024 }, // 10 MB file size limit
 });
 
 app.get('/', (req, res) => {
@@ -211,9 +222,9 @@ app.get('/home', (req, res) => {
     res.send('API running');
 });
 
-// api for the Sign-up
-app.post("/register", async (req, resp) => {
+app.post('/register', async (req, resp) => {
     try {
+        console.log('Register endpoint hit with data:', req.body);
         let user = new User(req.body);
         let result = await user.save();
         result = result.toObject();
@@ -225,11 +236,11 @@ app.post("/register", async (req, resp) => {
     }
 });
 
-// api for the login
-app.post("/login", async (req, resp) => {
+app.post('/login', async (req, resp) => {
     try {
+        console.log('Login endpoint hit with data:', req.body);
         if (req.body.password && req.body.email) {
-            let user = await User.findOne(req.body).select("-password");
+            let user = await User.findOne(req.body).select('-password');
             if (user) {
                 resp.send(user);
             } else {
@@ -244,9 +255,9 @@ app.post("/login", async (req, resp) => {
     }
 });
 
-//api to insert all the details 
-app.post("/details", upload.single('image'), async (req, resp) => {
+app.post('/details', upload.single('image'), async (req, resp) => {
     try {
+        console.log('Details endpoint hit with data:', req.body);
         let detail = new Detail({
             name: req.body.name,
             price: req.body.price,
@@ -275,9 +286,9 @@ app.post("/details", upload.single('image'), async (req, resp) => {
     }
 });
 
-//api to retrive all the details from the db
-app.get("/details", async (req, resp) => {
+app.get('/details', async (req, resp) => {
     try {
+        console.log('Get all details endpoint hit');
         let details = await Detail.find();
         let formattedDetails = details.map(detail => {
             return {
@@ -299,9 +310,9 @@ app.get("/details", async (req, resp) => {
     }
 });
 
-// api for the particular details from the id
-app.get("/details/:id", async (req, resp) => {
+app.get('/details/:id', async (req, resp) => {
     try {
+        console.log('Get detail by ID endpoint hit with ID:', req.params.id);
         let detail = await Detail.findById(req.params.id);
         if (!detail) {
             return resp.status(404).send({ error: 'Detail not found' });
@@ -331,9 +342,9 @@ app.get("/details/:id", async (req, resp) => {
     }
 });
 
-// Search endpoint
-app.get("/search", async (req, resp) => {
+app.get('/search', async (req, resp) => {
     try {
+        console.log('Search endpoint hit with query:', req.query);
         let { name, price, description } = req.query;
         let searchCriteria = {};
 
