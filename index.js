@@ -549,6 +549,7 @@ app.get("/search", async (req, resp) => {
             searchCriteria.description = new RegExp(description, 'i'); // Case insensitive regex search
         }
 
+        
         let results = await Detail.find(searchCriteria);
         resp.send(results);
     } catch (error) {
