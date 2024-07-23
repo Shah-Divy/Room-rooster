@@ -60,7 +60,7 @@ const detailSchema = new mongoose.Schema({
     bath: {
         type: Number,
         required: true
-    },
+    }
     // ownername: {
     //     type: String,
     //     required: true     
