@@ -280,7 +280,28 @@ app.post("/details", upload.single('image'), async (req, resp) => {
 });
 
 // API to retrieve all the details from the db
-app.get("/details", async (req, resp) => {
+// app.get("/details", async (req, resp) => {
+//     try {
+//         let details = await Detail.find();
+//         let formattedDetails = details.map(detail => {
+//             return {
+//                 _id: detail._id,
+//                 name: detail.name,
+//                 price: detail.price,
+//                 description: detail.description,
+//                 phoneNumber: detail.phoneNumber,
+//                 sqft: detail.sqft,
+//                 bed: detail.bed,
+//                 bath: detail.bath,
+//                 image: detail.image ? `data:${detail.image.contentType};base64,${detail.image.data.toString('base64')}` : null
+//             };
+//         });
+//         resp.send(formattedDetails);
+//     } catch (error) {
+//         resp.status(500).send({ error: 'Failed to retrieve details' });
+//     }
+// });
+app.get('/details', async (req, resp) => {
     try {
         let details = await Detail.find();
         let formattedDetails = details.map(detail => {
@@ -298,9 +319,13 @@ app.get("/details", async (req, resp) => {
         });
         resp.send(formattedDetails);
     } catch (error) {
+        console.error('Error retrieving details:', error);
         resp.status(500).send({ error: 'Failed to retrieve details' });
     }
 });
+
+
+
 
 // API for the particular details from the id
 app.get("/details/:id", async (req, resp) => {
