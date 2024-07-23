@@ -24,6 +24,8 @@
 // module.exports = Detail;
 
 
+const { type } = require('@testing-library/user-event/dist/type');
+const { request } = require('express');
 const mongoose = require('mongoose');
 
 const detailSchema = new mongoose.Schema({
@@ -58,7 +60,39 @@ const detailSchema = new mongoose.Schema({
     bath: {
         type: Number,
         required: true
+    },
+    ownername: {
+        type: String,
+        required: true     
+    },
+    deposit: {
+        type: Number,
+        required: true
+    },
+    FurnishedStatus: {
+        type: String,
+        required: true
+    },
+    Availability: {
+        type: String,
+        required: true
+    },
+    Perferredfor: {
+        type: String,
+        required: true
+    },
+    ageofconstruction: {
+        type: Number,
+        required: true
+    },
+    info: {
+        type: String,
+        required: true
     }
+
+
+
+
 
 });
 

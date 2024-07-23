@@ -215,6 +215,13 @@ app.post("/details", upload.single('image'), async (req, resp) => {
             sqft: req.body.sqft,
             bed: req.body.bed,
             bath: req.body.bath,
+            ownername: req.body.ownername,
+            deposit: req.body.deposit,
+            FurnishedStatus: req.body.FurnishedStatus,
+            Availability: req.body.Availability,
+            Perferredfor: req.body.Perferredfor,
+            ageofconstruction: req.body.ageofconstruction,
+            info: req.body.info,
             image: {
                 data: req.file.buffer,
                 contentType: req.file.mimetype
@@ -266,6 +273,13 @@ app.get("/details/:id", async (req, resp) => {
             sqft: detail.sqft,
             bed: detail.bed,
             bath: detail.bath,
+            ownername: detail.ownername,
+            deposit: detail.deposit,
+            FurnishedStatus: detail.FurnishedStatus,
+            Availability: detail.Availability,
+            Perferredfor: detail.Perferredfor,
+            ageofconstruction: detail.ageofconstruction,
+            info: detail.info,
             image: detail.image ? `data:${detail.image.contentType};base64,${detail.image.data.toString('base64')}` : null
         };
         resp.send(formattedDetail);
