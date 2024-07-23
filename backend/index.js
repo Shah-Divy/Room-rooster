@@ -5,7 +5,7 @@
 // const multer = require('multer');
 // require('./db/config');
 // const User = require("./db/User");
-// const Detail = require("./db/Detail");  // Import the new model
+// const Detail = require("./db/Detail");
 
 // dotenv.config();
 
@@ -30,6 +30,7 @@
 //     res.send('API running');
 // });
 
+// // api for the Sign-up
 // app.post("/register", async (req, resp) => {
 //     try {
 //         let user = new User(req.body);
@@ -42,6 +43,8 @@
 //     }
 // });
 
+
+// // api for the login
 // app.post("/login", async (req, resp) => {
 //     try {
 //         if (req.body.password && req.body.email) {
@@ -59,13 +62,24 @@
 //     }
 // });
 
-// // New route for adding details with image upload
+// //api to insert all the details 
 // app.post("/details", upload.single('image'), async (req, resp) => {
 //     try {
 //         let detail = new Detail({
 //             name: req.body.name,
 //             price: req.body.price,
 //             description: req.body.description,
+//             phoneNumber: req.body.phoneNumber,
+//             sqft: req.body.sqft,
+//             bed: req.body.bed,
+//             bath: req.body.bath,
+//             ownername: req.body.ownername,
+//             deposit: req.body.deposit,
+//             FurnishedStatus: req.body.FurnishedStatus,
+//             Availability: req.body.Availability,
+//             Perferredfor: req.body.Perferredfor,
+//             ageofconstruction: req.body.ageofconstruction,
+//             info: req.body.info,
 //             image: {
 //                 data: req.file.buffer,
 //                 contentType: req.file.mimetype
@@ -78,22 +92,7 @@
 //     }
 // });
 
-// // Route to retrieve an image by ID
-// app.get("/details/:id/image", async (req, resp) => {
-//     try {
-//         let detail = await Detail.findById(req.params.id);
-//         if (detail && detail.image && detail.image.data) {
-//             resp.set("Content-Type", detail.image.contentType);
-//             resp.send(detail.image.data);
-//         } else {
-//             resp.status(404).send({ error: 'Image not found' });
-//         }
-//     } catch (error) {
-//         resp.status(500).send({ error: 'Failed to retrieve image' });
-//     }
-// });
-
-// // Route to retrieve all details
+// //api to retrive all the details from the db
 // app.get("/details", async (req, resp) => {
 //     try {
 //         let details = await Detail.find();
@@ -103,6 +102,10 @@
 //                 name: detail.name,
 //                 price: detail.price,
 //                 description: detail.description,
+//                 phoneNumber: detail.phoneNumber,
+//                 sqft: detail.sqft,
+//                 bed: detail.bed,
+//                 bath: detail.bath,
 //                 image: detail.image ? `data:${detail.image.contentType};base64,${detail.image.data.toString('base64')}` : null
 //             };
 //         });
@@ -112,24 +115,59 @@
 //     }
 // });
 
-// // Route to retrieve a detail by ID
+// // api for the particular details from the id
 // app.get("/details/:id", async (req, resp) => {
 //     try {
 //         let detail = await Detail.findById(req.params.id);
-//         if (detail) {
-//             let formattedDetail = {
-//                 _id: detail._id,
-//                 name: detail.name,
-//                 price: detail.price,
-//                 description: detail.description,
-//                 image: detail.image ? `data:${detail.image.contentType};base64,${detail.image.data.toString('base64')}` : null
-//             };
-//             resp.send(formattedDetail);
-//         } else {
-//             resp.status(404).send({ error: 'Detail not found' });
+//         if (!detail) {
+//             return resp.status(404).send({ error: 'Detail not found' });
 //         }
+//         let formattedDetail = {
+//             _id: detail._id,
+//             name: detail.name,
+//             price: detail.price,
+//             description: detail.description,
+//             phoneNumber: detail.phoneNumber,
+//             sqft: detail.sqft,
+//             bed: detail.bed,
+//             bath: detail.bath,
+//             ownername: detail.ownername,
+//             deposit: detail.deposit,
+//             FurnishedStatus: detail.FurnishedStatus,
+//             Availability: detail.Availability,
+//             Perferredfor: detail.Perferredfor,
+//             ageofconstruction: detail.ageofconstruction,
+//             info: detail.info,
+//             image: detail.image ? `data:${detail.image.contentType};base64,${detail.image.data.toString('base64')}` : null
+//         };
+//         resp.send(formattedDetail);
 //     } catch (error) {
 //         resp.status(500).send({ error: 'Failed to retrieve detail' });
+//     }
+// });
+
+// // Search endpoint
+// app.get("/search", async (req, resp) => {
+//     try {
+//         let { name, price, description } = req.query;
+//         let searchCriteria = {};
+
+//         if (name) {
+//             searchCriteria.name = new RegExp(name, 'i'); // Case insensitive regex search
+//         }
+
+//         if (price) {
+//             searchCriteria.price = price;
+//         }
+
+//         if (description) {
+//             searchCriteria.description = new RegExp(description, 'i'); // Case insensitive regex search
+//         }
+
+//         let results = await Detail.find(searchCriteria);
+//         resp.send(results);
+//     } catch (error) {
+//         resp.status(500).send({ error: 'Failed to search details' });
 //     }
 // });
 
@@ -137,6 +175,7 @@
 // app.listen(PORT, () => {
 //     console.log(`Server is running on port ${PORT}`);
 // });
+
 
 
 
@@ -181,10 +220,10 @@ app.post("/register", async (req, resp) => {
         delete result.password;
         resp.send(result);
     } catch (error) {
+        console.error('Error during user registration:', error);
         resp.status(500).send({ error: 'Failed to register user' });
     }
 });
-
 
 // api for the login
 app.post("/login", async (req, resp) => {
@@ -200,6 +239,7 @@ app.post("/login", async (req, resp) => {
             resp.status(400).send({ result: 'Email and password are required' });
         }
     } catch (error) {
+        console.error('Error during user login:', error);
         resp.status(500).send({ error: 'Failed to login user' });
     }
 });
@@ -230,6 +270,7 @@ app.post("/details", upload.single('image'), async (req, resp) => {
         let result = await detail.save();
         resp.send(result);
     } catch (error) {
+        console.error('Error during saving detail:', error);
         resp.status(500).send({ error: 'Failed to save detail' });
     }
 });
@@ -253,6 +294,7 @@ app.get("/details", async (req, resp) => {
         });
         resp.send(formattedDetails);
     } catch (error) {
+        console.error('Error during retrieving details:', error);
         resp.status(500).send({ error: 'Failed to retrieve details' });
     }
 });
@@ -284,6 +326,7 @@ app.get("/details/:id", async (req, resp) => {
         };
         resp.send(formattedDetail);
     } catch (error) {
+        console.error('Error during retrieving detail:', error);
         resp.status(500).send({ error: 'Failed to retrieve detail' });
     }
 });
@@ -309,6 +352,7 @@ app.get("/search", async (req, resp) => {
         let results = await Detail.find(searchCriteria);
         resp.send(results);
     } catch (error) {
+        console.error('Error during search:', error);
         resp.status(500).send({ error: 'Failed to search details' });
     }
 });
