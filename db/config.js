@@ -30,18 +30,18 @@
 //     });
 
 
-
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 
 dotenv.config();
 
-mongoose.connect(process.env.DBHOST, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => {
-        console.log('MongoDB Connected');
-        process.exit(0);
-    })
-    .catch((err) => {
-        console.error('Error connecting to MongoDB:', err);
-        process.exit(1);
-    });
+mongoose.connect(process.env.DBHOST, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    serverSelectionTimeoutMS: 30000, // 30 seconds
+    socketTimeoutMS: 30000 // 30 seconds
+}).then(() => {
+    console.log('MongoDB Connected');
+}).catch((err) => {
+    console.error('Error connecting to MongoDB:', err);
+});
