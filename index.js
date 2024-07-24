@@ -138,12 +138,12 @@ app.get("/details/:id", async (req, resp) => {
             sqft: detail.sqft,
             bed: detail.bed,
             bath: detail.bath,
-            // ownername: detail.ownername,
+            ownername: detail.ownername,
             // deposit: detail.deposit,
-            // FurnishedStatus: detail.FurnishedStatus,
+            FurnishedStatus: detail.FurnishedStatus,
             // Availability: detail.Availability,
-            // Perferredfor: detail.Perferredfor,
-            // ageofconstruction: detail.ageofconstruction,
+            Perferredfor: detail.Perferredfor,
+            ageofconstruction: detail.ageofconstruction,
             info: detail.info,
             image: detail.image ? `data:${detail.image.contentType};base64,${detail.image.data.toString('base64')}` : null
         };

@@ -37,6 +37,22 @@ const detailSchema = new mongoose.Schema({
     info: {
         type: String,
         required: true
+    },
+    ownername: {
+        type: String,
+        required: true
+    },
+    FurnishedStatus:{
+        type: String,
+        required: true
+    },
+    Perferredfor: {
+        type: String,
+        required: true
+    },
+    ageofconstruction: {
+        type: Number,
+        required: true
     }
 });
 
