@@ -86,7 +86,7 @@ app.post("/details", upload.single('image'), async (req, resp) => {
             // Availability: req.body.Availability,
             // Perferredfor: req.body.Perferredfor,
             // ageofconstruction: req.body.ageofconstruction,
-            // info: req.body.info,
+            info: req.body.info,
             image: {
                 data: req.file.buffer,
                 contentType: req.file.mimetype

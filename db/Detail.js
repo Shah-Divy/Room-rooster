@@ -1,3 +1,4 @@
+const { type } = require('@testing-library/user-event/dist/cjs/utility/type.js');
 const mongoose = require('mongoose');
 
 const detailSchema = new mongoose.Schema({
@@ -31,6 +32,10 @@ const detailSchema = new mongoose.Schema({
     },
     bath: {
         type: Number,
+        required: true
+    },
+    info: {
+        type: String,
         required: true
     }
 });
