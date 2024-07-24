@@ -144,7 +144,7 @@ app.get("/details/:id", async (req, resp) => {
             // Availability: detail.Availability,
             // Perferredfor: detail.Perferredfor,
             // ageofconstruction: detail.ageofconstruction,
-            // info: detail.info,
+            info: detail.info,
             image: detail.image ? `data:${detail.image.contentType};base64,${detail.image.data.toString('base64')}` : null
         };
         resp.send(formattedDetail);
