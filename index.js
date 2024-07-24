@@ -9,7 +9,7 @@ const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const multer = require('multer');
 require('./db/config');
-const User = require("./db/User");
+const User = require("./db/Data");
 const Detail = require("./db/Detail");
 
 dotenv.config();
