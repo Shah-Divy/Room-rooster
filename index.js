@@ -23,6 +23,12 @@ app.use(express.urlencoded({ limit: '10mb', extended: true }));
 app.options("", cors(corsConfig));
 app.use(cors(corsConfig));
 
+
+app.options('/register', cors(corsConfig), (req, res) => {
+    res.sendStatus(204);
+});
+
+
 // Configure multer for file uploads
 const storage = multer.memoryStorage();
 const upload = multer({ 
