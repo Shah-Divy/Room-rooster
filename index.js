@@ -56,10 +56,9 @@ app.post("/register", async (req, resp) => {
         let result = await user.save();
         result = result.toObject();
         delete result.password;
-        resp.status(201).send(result);
+        resp.send(result);
     } catch (error) {
-        console.error('Signup Error:', error);
-        resp.status(500).send({ error: 'Failed to register user. Please try again.' });
+        resp.status(500).send({ error: 'Failed to register user' });
     }
 });
 
