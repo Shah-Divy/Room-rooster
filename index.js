@@ -45,17 +45,6 @@ app.get('/home', (req, res) => {
 });
 
 // api for the Sign-up
-// app.post("/register", async (req, resp) => {
-//     try {
-//         let user = new User(req.body);
-//         let result = await user.save();
-//         result = result.toObject();
-//         delete result.password;
-//         resp.send(result);
-//     } catch (error) {
-//         resp.status(500).send({ error: 'Failed to register user' });
-//     }
-// });
 app.post("/register", async (req, resp) => {
     try {
         let user = new User(req.body);
