@@ -24,9 +24,9 @@ app.options("", cors(corsConfig));
 app.use(cors(corsConfig));
 app.use(cors({ origin: 'https://room-roost.vercel.app' }));
 
-app.options('/register', cors(corsConfig), (req, res) => {
-    res.sendStatus(204);
-});
+// app.options('/register', cors(corsConfig), (req, res) => {
+//     res.sendStatus(204);
+// });
 
 
 // Configure multer for file uploads
