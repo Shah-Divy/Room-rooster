@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require("cors");
 const corsConfig = {
-    origin: "*",
+    origin: "https://room-roost.vercel.app",
     // Credential: true,
     Credentials: true,
     methods : ["GET", "POST", "PUT", "DELETE"],
