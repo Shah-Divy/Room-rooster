@@ -2,7 +2,8 @@ const express = require('express');
 const cors = require("cors");
 const corsConfig = {
     origin: "*",
-    Credential: true,
+    // Credential: true,
+    Credentials: true,
     methods : ["GET", "POST", "PUT", "DELETE"],
 };
 const dotenv = require('dotenv');
@@ -38,15 +39,27 @@ app.get('/home', (req, res) => {
 });
 
 // api for the Sign-up
+// app.post("/register", async (req, resp) => {
+//     try {
+//         let user = new User(req.body);
+//         let result = await user.save();
+//         result = result.toObject();
+//         delete result.password;
+//         resp.send(result);
+//     } catch (error) {
+//         resp.status(500).send({ error: 'Failed to register user' });
+//     }
+// });
 app.post("/register", async (req, resp) => {
     try {
         let user = new User(req.body);
         let result = await user.save();
         result = result.toObject();
         delete result.password;
-        resp.send(result);
+        resp.status(201).send(result);
     } catch (error) {
-        resp.status(500).send({ error: 'Failed to register user' });
+        console.error('Signup Error:', error);
+        resp.status(500).send({ error: 'Failed to register user. Please try again.' });
     }
 });
 
