@@ -53,6 +53,14 @@ const detailSchema = new mongoose.Schema({
     ageofconstruction: {
         type: Number,
         required: true
+    },
+    deposit: {
+        type: Number,
+        required: true
+    },
+    Availability: {
+        type: String,
+        required: true
     }
 });
 
