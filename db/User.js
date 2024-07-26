@@ -9,10 +9,33 @@
 // module.exports= mongoose.model("names",userScheme);
 
 
-const { type } = require('@testing-library/user-event/dist/cjs/utility/type.js');
+// const { type } = require('@testing-library/user-event/dist/cjs/utility/type.js');
+// const mongoose = require('mongoose');
+
+// const nameSchema = new mongoose.Schema({
+//     name: {
+//         type: String,
+//         required: true
+//     },
+//     email: {
+//         type: String,
+//         required: true
+//     },
+//     password: {
+//         type: String,
+//         required: true
+//     }
+// });
+
+
+// const User = mongoose.model('names', nameSchema);
+
+// module.exports = Detail;
+
+ const { type } = require('@testing-library/user-event/dist/cjs/utility/type.js');
 const mongoose = require('mongoose');
 
-const nameSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true
@@ -27,7 +50,6 @@ const nameSchema = new mongoose.Schema({
     }
 });
 
+const User = mongoose.model('names', userSchema);
 
-const Detail = mongoose.model('names', nameSchema);
-
-module.exports = Detail;
+module.exports = User;
