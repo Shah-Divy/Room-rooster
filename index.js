@@ -211,15 +211,13 @@ const corsConfig = {
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     preflightContinue: false,
-    optionsSuccessStatus: 204
+    optionsSuccessStatus: 204,
 };
+
+app.use(cors(corsConfig));
 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
-app.use(cors(corsConfig));
-
-// OPTIONS handler for preflight requests
-app.options('*', cors(corsConfig));
 
 // Configure multer for file uploads
 const storage = multer.memoryStorage();
