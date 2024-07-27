@@ -209,11 +209,17 @@ const corsConfig = {
     origin: 'https://room-rooster-kappa.vercel.app',
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    preflightContinue: false,
+    optionsSuccessStatus: 204
 };
 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
 app.use(cors(corsConfig));
+
+// OPTIONS handler for preflight requests
+app.options('*', cors(corsConfig));
 
 // Configure multer for file uploads
 const storage = multer.memoryStorage();
@@ -238,7 +244,7 @@ app.get('/home', (req, res) => {
 });
 
 // API for Sign-up
-app.post('/register', cors(corsConfig), async (req, res) => {
+app.post('/register', async (req, res) => {
     try {
         let user = new User(req.body);
         let result = await user.save();
@@ -251,7 +257,7 @@ app.post('/register', cors(corsConfig), async (req, res) => {
 });
 
 // API for login
-app.post('/login', cors(corsConfig), async (req, res) => {
+app.post('/login', async (req, res) => {
     try {
         if (req.body.password && req.body.email) {
             let user = await User.findOne(req.body).select('-password');
