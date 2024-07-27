@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require("cors");
 const corsConfig = {
-    origin: "https://room-roost.vercel.app",
+    origin: "https://room-rooster-kappa.vercel.app",
     // Credential: true,
     Credentials: true,
     methods : ["GET", "POST", "PUT", "DELETE"],
@@ -22,8 +22,8 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
 app.options("", cors(corsConfig));
 app.use(cors(corsConfig));
-app.use(cors({ origin: 'https://room-roost.vercel.app' }));
-
+// app.use(cors({ origin: 'https://room-roost.vercel.app' }));
+app.use(cors({ origin: 'https://room-rooster-kappa.vercel.app' }));
 // app.options('/register', cors(corsConfig), (req, res) => {
 //     res.sendStatus(204);
 // });
