@@ -1,39 +1,232 @@
+// const express = require('express');
+// const cors = require("cors");
+// const corsConfig = {
+//     origin: "https://room-rooster-kappa.vercel.app",
+//     // Credential: true,
+//     Credentials: true,
+//     methods : ["GET", "POST", "PUT", "DELETE"],
+// };
+// const dotenv = require('dotenv');
+// const mongoose = require('mongoose');
+// const multer = require('multer');
+// require('./db/config');
+// const User = require("./db/User");
+// const Detail = require("./db/Detail");
+
+// dotenv.config();
+
+
+// const app = express();
+
+// app.use(express.json({ limit: '10mb' }));
+// app.use(express.urlencoded({ limit: '10mb', extended: true }));
+// app.options("", cors(corsConfig));
+// app.use(cors(corsConfig));
+// // app.use(cors({ origin: 'https://room-roost.vercel.app' }));
+// app.use(cors({ origin: 'https://room-rooster-kappa.vercel.app' }));
+// // app.options('/register', cors(corsConfig), (req, res) => {
+// //     res.sendStatus(204);
+// // });
+
+
+// // Configure multer for file uploads
+// const storage = multer.memoryStorage();
+// const upload = multer({ 
+//     storage: storage,
+//     limits: { fileSize: 10 * 1024 * 1024 } // 10 MB file size limit
+// });
+
+// app.get('/', (req, res) => {
+//     res.send('Products API running');
+// });
+
+// app.get('/home', (req, res) => {
+//     res.send('API running');
+// });
+
+// // api for the Sign-up
+// app.post("/register", async (req, resp) => {
+//     try {
+//         let user = new User(req.body);
+//         let result = await user.save();
+//         result = result.toObject();
+//         delete result.password;
+//         resp.send(result);
+//     } catch (error) {
+//         resp.status(500).send({ error: 'Failed to register user' });
+//     }
+// });
+
+
+// // api for the login
+// app.post("/login", async (req, resp) => {
+//     try {
+//         if (req.body.password && req.body.email) {
+//             let user = await User.findOne(req.body).select("-password");
+//             if (user) {
+//                 resp.send(user);
+//             } else {
+//                 resp.status(404).send({ result: 'No User Found' });
+//             }
+//         } else {
+//             resp.status(400).send({ result: 'Email and password are required' });
+//         }
+//     } catch (error) {
+//         resp.status(500).send({ error: 'Failed to login user' });
+//     }
+// });
+
+// //api to insert all the details 
+// app.post("/details", upload.single('image'), async (req, resp) => {
+//     try {
+//         let detail = new Detail({
+//             name: req.body.name,
+//             price: req.body.price,
+//             description: req.body.description,
+//             phoneNumber: req.body.phoneNumber,
+//             sqft: req.body.sqft,
+//             bed: req.body.bed,
+//             bath: req.body.bath,
+//             ownername: req.body.ownername,
+//             deposit: req.body.deposit,
+//             FurnishedStatus: req.body.FurnishedStatus,
+//             Availability: req.body.Availability,
+//             Perferredfor: req.body.Perferredfor,
+//             ageofconstruction: req.body.ageofconstruction,
+//             info: req.body.info,
+//             image: {
+//                 data: req.file.buffer,
+//                 contentType: req.file.mimetype
+//             }
+//         });
+//         let result = await detail.save();
+//         resp.send(result);
+//     } catch (error) {
+//         resp.status(500).send({ error: 'Failed to save detail' });
+//     }
+// });
+
+// //api to retrive all the details from the db
+// app.get("/details", async (req, resp) => {
+//     try {
+//         let details = await Detail.find();
+//         let formattedDetails = details.map(detail => {
+//             return {
+//                 _id: detail._id,
+//                 name: detail.name,
+//                 price: detail.price,
+//                 description: detail.description,
+//                 phoneNumber: detail.phoneNumber,
+//                 sqft: detail.sqft,
+//                 bed: detail.bed,
+//                 bath: detail.bath,
+//                 image: detail.image ? `data:${detail.image.contentType};base64,${detail.image.data.toString('base64')}` : null
+//             };
+//         });
+//         resp.send(formattedDetails);
+//     } catch (error) {
+//         resp.status(500).send({ error: 'Failed to retrieve details' });
+//     }
+// });
+
+// // api for the particular details from the id
+// app.get("/details/:id", async (req, resp) => {
+//     try {
+//         let detail = await Detail.findById(req.params.id);
+//         if (!detail) {
+//             return resp.status(404).send({ error: 'Detail not found' });
+//         }
+//         let formattedDetail = {
+//             _id: detail._id,
+//             name: detail.name,
+//             price: detail.price,
+//             description: detail.description,
+//             phoneNumber: detail.phoneNumber,
+//             sqft: detail.sqft,
+//             bed: detail.bed,
+//             bath: detail.bath,
+//             ownername: detail.ownername,
+//             deposit: detail.deposit,
+//             FurnishedStatus: detail.FurnishedStatus,
+//             Availability: detail.Availability,
+//             Perferredfor: detail.Perferredfor,
+//             ageofconstruction: detail.ageofconstruction,
+//             info: detail.info,
+//             image: detail.image ? `data:${detail.image.contentType};base64,${detail.image.data.toString('base64')}` : null
+//         };
+//         resp.send(formattedDetail);
+//     } catch (error) {
+//         resp.status(500).send({ error: 'Failed to retrieve detail' });
+//     }
+// });
+
+// // Search endpoint
+// app.get("/search", async (req, resp) => {
+//     try {
+//         let { name, price, description } = req.query;
+//         let searchCriteria = {};
+
+//         if (name) {
+//             searchCriteria.name = new RegExp(name, 'i'); // Case insensitive regex search
+//         }
+
+//         if (price) {
+//             searchCriteria.price = price;
+//         }
+
+//         if (description) {
+//             searchCriteria.description = new RegExp(description, 'i'); // Case insensitive regex search
+//         }
+
+//         let results = await Detail.find(searchCriteria);
+//         resp.send(results);
+//     } catch (error) {
+//         resp.status(500).send({ error: 'Failed to search details' });
+//     }
+// });
+
+// const PORT = process.env.PORT || 5000;
+// app.listen(PORT, () => {
+//     console.log(`Server is running on port ${PORT}`);
+// });
+
+
+
 const express = require('express');
-const cors = require("cors");
-const corsConfig = {
-    origin: "https://room-rooster-kappa.vercel.app",
-    // Credential: true,
-    Credentials: true,
-    methods : ["GET", "POST", "PUT", "DELETE"],
-};
+const cors = require('cors');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const multer = require('multer');
 require('./db/config');
-const User = require("./db/User");
-const Detail = require("./db/Detail");
+const User = require('./db/User');
+const Detail = require('./db/Detail');
 
 dotenv.config();
 
-
 const app = express();
+
+const corsConfig = {
+    origin: 'https://room-rooster-kappa.vercel.app',
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+};
 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
-app.options("", cors(corsConfig));
 app.use(cors(corsConfig));
-// app.use(cors({ origin: 'https://room-roost.vercel.app' }));
-app.use(cors({ origin: 'https://room-rooster-kappa.vercel.app' }));
-// app.options('/register', cors(corsConfig), (req, res) => {
-//     res.sendStatus(204);
-// });
-
 
 // Configure multer for file uploads
 const storage = multer.memoryStorage();
-const upload = multer({ 
+const upload = multer({
     storage: storage,
-    limits: { fileSize: 10 * 1024 * 1024 } // 10 MB file size limit
+    limits: { fileSize: 10 * 1024 * 1024 }, // 10 MB file size limit
+    fileFilter: (req, file, cb) => {
+        if (file.mimetype.startsWith('image/')) {
+            cb(null, true);
+        } else {
+            cb(new Error('Only images are allowed!'), false);
+        }
+    }
 });
 
 app.get('/', (req, res) => {
@@ -44,40 +237,39 @@ app.get('/home', (req, res) => {
     res.send('API running');
 });
 
-// api for the Sign-up
-app.post("/register", async (req, resp) => {
+// API for Sign-up
+app.post('/register', cors(corsConfig), async (req, res) => {
     try {
         let user = new User(req.body);
         let result = await user.save();
         result = result.toObject();
         delete result.password;
-        resp.send(result);
+        res.send(result);
     } catch (error) {
-        resp.status(500).send({ error: 'Failed to register user' });
+        res.status(500).send({ error: 'Failed to register user' });
     }
 });
 
-
-// api for the login
-app.post("/login", async (req, resp) => {
+// API for login
+app.post('/login', cors(corsConfig), async (req, res) => {
     try {
         if (req.body.password && req.body.email) {
-            let user = await User.findOne(req.body).select("-password");
+            let user = await User.findOne(req.body).select('-password');
             if (user) {
-                resp.send(user);
+                res.send(user);
             } else {
-                resp.status(404).send({ result: 'No User Found' });
+                res.status(404).send({ result: 'No User Found' });
             }
         } else {
-            resp.status(400).send({ result: 'Email and password are required' });
+            res.status(400).send({ result: 'Email and password are required' });
         }
     } catch (error) {
-        resp.status(500).send({ error: 'Failed to login user' });
+        res.status(500).send({ error: 'Failed to login user' });
     }
 });
 
-//api to insert all the details 
-app.post("/details", upload.single('image'), async (req, resp) => {
+// API to insert all the details
+app.post('/details', upload.single('image'), async (req, res) => {
     try {
         let detail = new Detail({
             name: req.body.name,
@@ -100,41 +292,39 @@ app.post("/details", upload.single('image'), async (req, resp) => {
             }
         });
         let result = await detail.save();
-        resp.send(result);
+        res.send(result);
     } catch (error) {
-        resp.status(500).send({ error: 'Failed to save detail' });
+        res.status(500).send({ error: 'Failed to save detail' });
     }
 });
 
-//api to retrive all the details from the db
-app.get("/details", async (req, resp) => {
+// API to retrieve all the details from the DB
+app.get('/details', async (req, res) => {
     try {
         let details = await Detail.find();
-        let formattedDetails = details.map(detail => {
-            return {
-                _id: detail._id,
-                name: detail.name,
-                price: detail.price,
-                description: detail.description,
-                phoneNumber: detail.phoneNumber,
-                sqft: detail.sqft,
-                bed: detail.bed,
-                bath: detail.bath,
-                image: detail.image ? `data:${detail.image.contentType};base64,${detail.image.data.toString('base64')}` : null
-            };
-        });
-        resp.send(formattedDetails);
+        let formattedDetails = details.map(detail => ({
+            _id: detail._id,
+            name: detail.name,
+            price: detail.price,
+            description: detail.description,
+            phoneNumber: detail.phoneNumber,
+            sqft: detail.sqft,
+            bed: detail.bed,
+            bath: detail.bath,
+            image: detail.image ? `data:${detail.image.contentType};base64,${detail.image.data.toString('base64')}` : null
+        }));
+        res.send(formattedDetails);
     } catch (error) {
-        resp.status(500).send({ error: 'Failed to retrieve details' });
+        res.status(500).send({ error: 'Failed to retrieve details' });
     }
 });
 
-// api for the particular details from the id
-app.get("/details/:id", async (req, resp) => {
+// API to retrieve a particular detail by ID
+app.get('/details/:id', async (req, res) => {
     try {
         let detail = await Detail.findById(req.params.id);
         if (!detail) {
-            return resp.status(404).send({ error: 'Detail not found' });
+            return res.status(404).send({ error: 'Detail not found' });
         }
         let formattedDetail = {
             _id: detail._id,
@@ -154,14 +344,14 @@ app.get("/details/:id", async (req, resp) => {
             info: detail.info,
             image: detail.image ? `data:${detail.image.contentType};base64,${detail.image.data.toString('base64')}` : null
         };
-        resp.send(formattedDetail);
+        res.send(formattedDetail);
     } catch (error) {
-        resp.status(500).send({ error: 'Failed to retrieve detail' });
+        res.status(500).send({ error: 'Failed to retrieve detail' });
     }
 });
 
 // Search endpoint
-app.get("/search", async (req, resp) => {
+app.get('/search', async (req, res) => {
     try {
         let { name, price, description } = req.query;
         let searchCriteria = {};
@@ -179,9 +369,9 @@ app.get("/search", async (req, resp) => {
         }
 
         let results = await Detail.find(searchCriteria);
-        resp.send(results);
+        res.send(results);
     } catch (error) {
-        resp.status(500).send({ error: 'Failed to search details' });
+        res.status(500).send({ error: 'Failed to search details' });
     }
 });
 
