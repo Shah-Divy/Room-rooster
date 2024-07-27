@@ -216,6 +216,9 @@ const corsConfig = {
 
 app.use(cors(corsConfig));
 
+// Explicitly handle preflight requests
+app.options('*', cors(corsConfig));
+
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
 
@@ -224,13 +227,6 @@ const storage = multer.memoryStorage();
 const upload = multer({
     storage: storage,
     limits: { fileSize: 10 * 1024 * 1024 }, // 10 MB file size limit
-    fileFilter: (req, file, cb) => {
-        if (file.mimetype.startsWith('image/')) {
-            cb(null, true);
-        } else {
-            cb(new Error('Only images are allowed!'), false);
-        }
-    }
 });
 
 app.get('/', (req, res) => {
@@ -292,8 +288,8 @@ app.post('/details', upload.single('image'), async (req, res) => {
             info: req.body.info,
             image: {
                 data: req.file.buffer,
-                contentType: req.file.mimetype
-            }
+                contentType: req.file.mimetype,
+            },
         });
         let result = await detail.save();
         res.send(result);
@@ -306,7 +302,7 @@ app.post('/details', upload.single('image'), async (req, res) => {
 app.get('/details', async (req, res) => {
     try {
         let details = await Detail.find();
-        let formattedDetails = details.map(detail => ({
+        let formattedDetails = details.map((detail) => ({
             _id: detail._id,
             name: detail.name,
             price: detail.price,
@@ -315,7 +311,7 @@ app.get('/details', async (req, res) => {
             sqft: detail.sqft,
             bed: detail.bed,
             bath: detail.bath,
-            image: detail.image ? `data:${detail.image.contentType};base64,${detail.image.data.toString('base64')}` : null
+            image: detail.image ? `data:${detail.image.contentType};base64,${detail.image.data.toString('base64')}` : null,
         }));
         res.send(formattedDetails);
     } catch (error) {
@@ -346,7 +342,7 @@ app.get('/details/:id', async (req, res) => {
             Perferredfor: detail.Perferredfor,
             ageofconstruction: detail.ageofconstruction,
             info: detail.info,
-            image: detail.image ? `data:${detail.image.contentType};base64,${detail.image.data.toString('base64')}` : null
+            image: detail.image ? `data:${detail.image.contentType};base64,${detail.image.data.toString('base64')}` : null,
         };
         res.send(formattedDetail);
     } catch (error) {
