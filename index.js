@@ -1,39 +1,38 @@
 // const express = require('express');
-// const cors = require("cors");
-// const corsConfig = {
-//     origin: "https://room-rooster-kappa.vercel.app",
-//     // Credential: true,
-//     Credentials: true,
-//     methods : ["GET", "POST", "PUT", "DELETE"],
-// };
+// const cors = require('cors');
 // const dotenv = require('dotenv');
 // const mongoose = require('mongoose');
 // const multer = require('multer');
 // require('./db/config');
-// const User = require("./db/User");
-// const Detail = require("./db/Detail");
+// const User = require('./db/User');
+// const Detail = require('./db/Detail');
 
 // dotenv.config();
 
-
 // const app = express();
+
+// const corsConfig = {
+//     origin: 'https://room-rooster-kappa.vercel.app',
+//     credentials: true,
+//     methods: ['GET', 'POST', 'PUT', 'DELETE'],
+//     allowedHeaders: ['Content-Type', 'Authorization'],
+//     preflightContinue: false,
+//     optionsSuccessStatus: 204,
+// };
+
+// app.use(cors(corsConfig));
+
+// // Explicitly handle preflight requests
+// app.options('*', cors(corsConfig));
 
 // app.use(express.json({ limit: '10mb' }));
 // app.use(express.urlencoded({ limit: '10mb', extended: true }));
-// app.options("", cors(corsConfig));
-// app.use(cors(corsConfig));
-// // app.use(cors({ origin: 'https://room-roost.vercel.app' }));
-// app.use(cors({ origin: 'https://room-rooster-kappa.vercel.app' }));
-// // app.options('/register', cors(corsConfig), (req, res) => {
-// //     res.sendStatus(204);
-// // });
-
 
 // // Configure multer for file uploads
 // const storage = multer.memoryStorage();
-// const upload = multer({ 
+// const upload = multer({
 //     storage: storage,
-//     limits: { fileSize: 10 * 1024 * 1024 } // 10 MB file size limit
+//     limits: { fileSize: 10 * 1024 * 1024 }, // 10 MB file size limit
 // });
 
 // app.get('/', (req, res) => {
@@ -44,40 +43,39 @@
 //     res.send('API running');
 // });
 
-// // api for the Sign-up
-// app.post("/register", async (req, resp) => {
+// // API for Sign-up
+// app.post('/register', async (req, res) => {
 //     try {
 //         let user = new User(req.body);
 //         let result = await user.save();
 //         result = result.toObject();
 //         delete result.password;
-//         resp.send(result);
+//         res.send(result);
 //     } catch (error) {
-//         resp.status(500).send({ error: 'Failed to register user' });
+//         res.status(500).send({ error: 'Failed to register user' });
 //     }
 // });
 
-
-// // api for the login
-// app.post("/login", async (req, resp) => {
+// // API for login
+// app.post('/login', async (req, res) => {
 //     try {
 //         if (req.body.password && req.body.email) {
-//             let user = await User.findOne(req.body).select("-password");
+//             let user = await User.findOne(req.body).select('-password');
 //             if (user) {
-//                 resp.send(user);
+//                 res.send(user);
 //             } else {
-//                 resp.status(404).send({ result: 'No User Found' });
+//                 res.status(404).send({ result: 'No User Found' });
 //             }
 //         } else {
-//             resp.status(400).send({ result: 'Email and password are required' });
+//             res.status(400).send({ result: 'Email and password are required' });
 //         }
 //     } catch (error) {
-//         resp.status(500).send({ error: 'Failed to login user' });
+//         res.status(500).send({ error: 'Failed to login user' });
 //     }
 // });
 
-// //api to insert all the details 
-// app.post("/details", upload.single('image'), async (req, resp) => {
+// // API to insert all the details
+// app.post('/details', upload.single('image'), async (req, res) => {
 //     try {
 //         let detail = new Detail({
 //             name: req.body.name,
@@ -96,45 +94,43 @@
 //             info: req.body.info,
 //             image: {
 //                 data: req.file.buffer,
-//                 contentType: req.file.mimetype
-//             }
+//                 contentType: req.file.mimetype,
+//             },
 //         });
 //         let result = await detail.save();
-//         resp.send(result);
+//         res.send(result);
 //     } catch (error) {
-//         resp.status(500).send({ error: 'Failed to save detail' });
+//         res.status(500).send({ error: 'Failed to save detail' });
 //     }
 // });
 
-// //api to retrive all the details from the db
-// app.get("/details", async (req, resp) => {
+// // API to retrieve all the details from the DB
+// app.get('/details', async (req, res) => {
 //     try {
 //         let details = await Detail.find();
-//         let formattedDetails = details.map(detail => {
-//             return {
-//                 _id: detail._id,
-//                 name: detail.name,
-//                 price: detail.price,
-//                 description: detail.description,
-//                 phoneNumber: detail.phoneNumber,
-//                 sqft: detail.sqft,
-//                 bed: detail.bed,
-//                 bath: detail.bath,
-//                 image: detail.image ? `data:${detail.image.contentType};base64,${detail.image.data.toString('base64')}` : null
-//             };
-//         });
-//         resp.send(formattedDetails);
+//         let formattedDetails = details.map((detail) => ({
+//             _id: detail._id,
+//             name: detail.name,
+//             price: detail.price,
+//             description: detail.description,
+//             phoneNumber: detail.phoneNumber,
+//             sqft: detail.sqft,
+//             bed: detail.bed,
+//             bath: detail.bath,
+//             image: detail.image ? `data:${detail.image.contentType};base64,${detail.image.data.toString('base64')}` : null,
+//         }));
+//         res.send(formattedDetails);
 //     } catch (error) {
-//         resp.status(500).send({ error: 'Failed to retrieve details' });
+//         res.status(500).send({ error: 'Failed to retrieve details' });
 //     }
 // });
 
-// // api for the particular details from the id
-// app.get("/details/:id", async (req, resp) => {
+// // API to retrieve a particular detail by ID
+// app.get('/details/:id', async (req, res) => {
 //     try {
 //         let detail = await Detail.findById(req.params.id);
 //         if (!detail) {
-//             return resp.status(404).send({ error: 'Detail not found' });
+//             return res.status(404).send({ error: 'Detail not found' });
 //         }
 //         let formattedDetail = {
 //             _id: detail._id,
@@ -152,16 +148,16 @@
 //             Perferredfor: detail.Perferredfor,
 //             ageofconstruction: detail.ageofconstruction,
 //             info: detail.info,
-//             image: detail.image ? `data:${detail.image.contentType};base64,${detail.image.data.toString('base64')}` : null
+//             image: detail.image ? `data:${detail.image.contentType};base64,${detail.image.data.toString('base64')}` : null,
 //         };
-//         resp.send(formattedDetail);
+//         res.send(formattedDetail);
 //     } catch (error) {
-//         resp.status(500).send({ error: 'Failed to retrieve detail' });
+//         res.status(500).send({ error: 'Failed to retrieve detail' });
 //     }
 // });
 
 // // Search endpoint
-// app.get("/search", async (req, resp) => {
+// app.get('/search', async (req, res) => {
 //     try {
 //         let { name, price, description } = req.query;
 //         let searchCriteria = {};
@@ -179,9 +175,9 @@
 //         }
 
 //         let results = await Detail.find(searchCriteria);
-//         resp.send(results);
+//         res.send(results);
 //     } catch (error) {
-//         resp.status(500).send({ error: 'Failed to search details' });
+//         res.status(500).send({ error: 'Failed to search details' });
 //     }
 // });
 
@@ -189,6 +185,8 @@
 // app.listen(PORT, () => {
 //     console.log(`Server is running on port ${PORT}`);
 // });
+
+
 
 
 
@@ -237,34 +235,52 @@ app.get('/home', (req, res) => {
     res.send('API running');
 });
 
-// API for Sign-up
-app.post('/register', async (req, res) => {
+// Signup route
+app.post('/signup', async (req, res) => {
+    const { name, email, password } = req.body;
+
     try {
-        let user = new User(req.body);
-        let result = await user.save();
-        result = result.toObject();
-        delete result.password;
-        res.send(result);
+        // Check if user already exists
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            return res.status(400).json({ message: 'User already exists' });
+        }
+
+        // Create a new user
+        const newUser = new User({
+            name,
+            email,
+            password,
+        });
+
+        // Save the user to the database
+        await newUser.save();
+
+        res.status(201).json({ message: 'User created successfully' });
     } catch (error) {
-        res.status(500).send({ error: 'Failed to register user' });
+        res.status(500).json({ message: 'Error creating user', error });
     }
 });
 
-// API for login
+// Login route
 app.post('/login', async (req, res) => {
+    const { email, password } = req.body;
+
     try {
-        if (req.body.password && req.body.email) {
-            let user = await User.findOne(req.body).select('-password');
-            if (user) {
-                res.send(user);
-            } else {
-                res.status(404).send({ result: 'No User Found' });
-            }
-        } else {
-            res.status(400).send({ result: 'Email and password are required' });
+        // Check if the user exists
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(400).json({ message: 'Invalid email or password' });
         }
+
+        // Check if the provided password matches the stored password
+        if (password !== user.password) {
+            return res.status(400).json({ message: 'Invalid email or password' });
+        }
+
+        res.status(200).json({ message: 'Login successful' });
     } catch (error) {
-        res.status(500).send({ error: 'Failed to login user' });
+        res.status(500).json({ message: 'Error logging in', error });
     }
 });
 
