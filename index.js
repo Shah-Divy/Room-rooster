@@ -397,7 +397,6 @@
 // });
 
 
-
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
@@ -412,7 +411,7 @@ dotenv.config();
 const app = express();
 
 const corsConfig = {
-    origin: 'https://room-rooster-kappa.vercel.app', // Replace with your frontend's URL
+    origin: 'https://room-rooster-kappa.vercel.app', // Ensure this matches your frontend URL
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
@@ -443,52 +442,30 @@ app.get('/home', (req, res) => {
     res.send('API running');
 });
 
-// Signup route
+// User Signup
 app.post('/signup', async (req, res) => {
-    const { name, email, password } = req.body;
-
     try {
-        // Check if user already exists
-        const existingUser = await User.findOne({ email });
-        if (existingUser) {
-            return res.status(400).json({ message: 'User already exists' });
-        }
-
-        // Create a new user
-        const newUser = new User({
-            name,
-            email,
-            password,
-        });
-
-        // Save the user to the database
-        await newUser.save();
-
-        res.status(201).json({ message: 'User created successfully' });
+        const { name, email, password } = req.body;
+        const user = new User({ name, email, password });
+        await user.save();
+        res.status(201).json({ name: user.name, email: user.email });
     } catch (error) {
-        res.status(500).json({ message: 'Error creating user', error });
+        res.status(500).json({ error: 'Failed to create user' });
     }
 });
 
-// Login route
+// User Login
 app.post('/login', async (req, res) => {
-    const { email, password } = req.body;
-
     try {
-        // Check if the user exists
-        const user = await User.findOne({ email });
-        if (!user) {
-            return res.status(400).json({ message: 'Invalid email or password' });
+        const { email, password } = req.body;
+        const user = await User.findOne({ email, password });
+        if (user) {
+            res.status(200).json({ name: user.name, email: user.email });
+        } else {
+            res.status(401).json({ error: 'Invalid credentials' });
         }
-
-        // Check if the provided password matches the stored password
-        if (password !== user.password) {
-            return res.status(400).json({ message: 'Invalid email or password' });
-        }
-
-        res.status(200).json({ message: 'Login successful' });
     } catch (error) {
-        res.status(500).json({ message: 'Error logging in', error });
+        res.status(500).json({ error: 'Login failed' });
     }
 });
 
