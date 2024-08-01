@@ -131,6 +131,10 @@ const detailSchema = new mongoose.Schema({
     Availability: {
         type: String,
         required: true
+    },
+    location: {
+        type: String,
+        required: true
     }
 });
 

@@ -301,6 +301,7 @@ app.post('/details', upload.array('images', 3), async (req, res) => {
             Perferredfor: req.body.Perferredfor,
             ageofconstruction: req.body.ageofconstruction,
             info: req.body.info,
+            location: req.body.location,
             images: images,
         });
 
@@ -329,6 +330,7 @@ app.get('/details', async (req, res) => {
             sqft: detail.sqft,
             bed: detail.bed,
             bath: detail.bath,
+            location: detail.location,
             images: detail.images.map(image => `data:${image.contentType};base64,${image.data.toString('base64')}`),
         }));
         res.send(formattedDetails);
@@ -360,6 +362,7 @@ app.get('/details/:id', async (req, res) => {
             Perferredfor: detail.Perferredfor,
             ageofconstruction: detail.ageofconstruction,
             info: detail.info,
+            location: detail.location,
             images: detail.images.map(image => `data:${image.contentType};base64,${image.data.toString('base64')}`),
         };
         res.send(formattedDetail);
