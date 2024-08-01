@@ -22,10 +22,9 @@
 
 
 
-
 const mongoose = require('mongoose');
 
-const userSchema = new mongoose.Schema({
+const divySchema = new mongoose.Schema({
     name: {
         type: String,
         required: true
@@ -40,6 +39,6 @@ const userSchema = new mongoose.Schema({
     }
 });
 
-const User = mongoose.model('names', userSchema);
+const Divy = mongoose.model('Divy', divySchema);
 
-module.exports = User;
+module.exports = Divy;
