@@ -114,7 +114,7 @@ app.post('/details', upload.array('images', 3), async (req, res) => {
     try {
         console.log('Received request to add details');
         
-        const images = req.files.map(file => ({
+        const image = req.files.map(file => ({
             data: file.buffer,
             contentType: file.mimetype,
         }));
@@ -134,7 +134,7 @@ app.post('/details', upload.array('images', 3), async (req, res) => {
             Perferredfor: req.body.Perferredfor,
             ageofconstruction: req.body.ageofconstruction,
             info: req.body.info,
-            images: images,
+            image: image,
         });
 
         console.log('Detail object created, saving to database');
