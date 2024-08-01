@@ -415,8 +415,8 @@ const corsConfig = {
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
-    preflightContinue: false,
-    optionsSuccessStatus: 204,
+   // preflightContinue: false,
+   // optionsSuccessStatus: 204,
 };
 
 app.use(cors(corsConfig));
@@ -443,29 +443,63 @@ app.get('/home', (req, res) => {
 });
 
 // User Signup
-app.post('/signup', async (req, res) => {
+// app.post('/signup', async (req, res) => {
+//     try {
+//         const { name, email, password } = req.body;
+//         const user = new User({ name, email, password });
+//         await user.save();
+//         res.status(201).json({ name: user.name, email: user.email });
+//     } catch (error) {
+//         res.status(500).json({ error: 'Failed to create user' });
+//     }
+// });
+app.post('/register', async (req, res) => {
     try {
-        const { name, email, password } = req.body;
-        const user = new User({ name, email, password });
-        await user.save();
-        res.status(201).json({ name: user.name, email: user.email });
+        let user = new User(req.body);
+        await user.validate(); // Validate user data
+        let result = await user.save();
+        result = result.toObject();
+        delete result.password;
+        res.send(result);
     } catch (error) {
-        res.status(500).json({ error: 'Failed to create user' });
+        console.error('Error during registration:', error);
+        if (error.name === 'ValidationError') {
+            res.status(400).send({ error: 'Validation failed', details: error.errors });
+        } else {
+            res.status(500).send({ error: 'Failed to register user' });
+        }
     }
 });
 
 // User Login
+// app.post('/login', async (req, res) => {
+//     try {
+//         const { email, password } = req.body;
+//         const user = await User.findOne({ email, password });
+//         if (user) {
+//             res.status(200).json({ name: user.name, email: user.email });
+//         } else {
+//             res.status(401).json({ error: 'Invalid credentials' });
+//         }
+//     } catch (error) {
+//         res.status(500).json({ error: 'Login failed' });
+//     }
+// });
 app.post('/login', async (req, res) => {
     try {
-        const { email, password } = req.body;
-        const user = await User.findOne({ email, password });
-        if (user) {
-            res.status(200).json({ name: user.name, email: user.email });
+        if (req.body.password && req.body.email) {
+            let user = await User.findOne({ email: req.body.email, password: req.body.password }).select('-password');
+            if (user) {
+                res.send(user);
+            } else {
+                res.status(404).send({ result: 'No User Found' });
+            }
         } else {
-            res.status(401).json({ error: 'Invalid credentials' });
+            res.status(400).send({ result: 'Email and password are required' });
         }
     } catch (error) {
-        res.status(500).json({ error: 'Login failed' });
+        console.error('Error during login:', error);
+        res.status(500).send({ error: 'Failed to login user' });
     }
 });
 
