@@ -278,6 +278,8 @@ app.post('/login', async (req, res) => {
 // API to insert all the details
 app.post('/details', upload.array('images', 3), async (req, res) => {
     try {
+        console.log('Received request to add details');
+        
         const images = req.files.map(file => ({
             data: file.buffer,
             contentType: file.mimetype,
@@ -300,10 +302,15 @@ app.post('/details', upload.array('images', 3), async (req, res) => {
             info: req.body.info,
             images: images,
         });
+
+        console.log('Detail object created, saving to database');
+
         let result = await detail.save();
+
+        console.log('Detail saved successfully');
         res.send(result);
     } catch (error) {
-        console.error('Error saving detail:', error); // Log the error details
+        console.error('Error saving detail:', error);
         res.status(500).send({ error: 'Failed to save detail' });
     }
 });
