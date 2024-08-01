@@ -70,6 +70,8 @@
 
 
 
+const mongoose = require('mongoose');
+
 const detailSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -111,7 +113,7 @@ const detailSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    FurnishedStatus:{
+    FurnishedStatus: {
         type: String,
         required: true
     },

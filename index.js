@@ -199,7 +199,7 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const multer = require('multer');
-require('./db/config');
+require('./db/config'); // Ensure this file correctly sets up the MongoDB connection
 const User = require('./db/Divy');
 const Detail = require('./db/Detail');
 
