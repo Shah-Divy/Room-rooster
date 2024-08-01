@@ -19,10 +19,11 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 mongoose.connect(process.env.MONGO_URL, {
+    serverSelectionTimeoutMS: 5000,
     useNewUrlParser: true,  // This is no longer necessary and can be removed
     useUnifiedTopology: true // This is no longer necessary and can be removed
 }).then(() => {
     console.log('Connected to MongoDB');
 }).catch((error) => {
     console.error('Error connecting to MongoDB:', error);
-});
+}); 

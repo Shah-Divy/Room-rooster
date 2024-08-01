@@ -199,7 +199,7 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const multer = require('multer');
-require('./db/config'); // Ensure this file correctly sets up the MongoDB connection
+require('./db/config');
 const User = require('./db/Divy');
 const Detail = require('./db/Detail');
 
@@ -215,8 +215,6 @@ const corsConfig = {
 };
 
 app.use(cors(corsConfig));
-
-// Explicitly handle preflight requests
 app.options('*', cors(corsConfig));
 
 app.use(express.json({ limit: '10mb' }));
@@ -318,6 +316,7 @@ app.post('/details', upload.array('images', 3), async (req, res) => {
 // API to retrieve all the details from the DB
 app.get('/details', async (req, res) => {
     try {
+        console.log('Received request to retrieve all details');
         let details = await Detail.find();
         let formattedDetails = details.map((detail) => ({
             _id: detail._id,
@@ -330,9 +329,10 @@ app.get('/details', async (req, res) => {
             bath: detail.bath,
             images: detail.images.map(image => `data:${image.contentType};base64,${image.data.toString('base64')}`),
         }));
+        console.log('Retrieved all details successfully');
         res.send(formattedDetails);
     } catch (error) {
-        console.error('Error retrieving details:', error); // Log the error details
+        console.error('Error retrieving details:', error);
         res.status(500).send({ error: 'Failed to retrieve details' });
     }
 });
@@ -340,8 +340,10 @@ app.get('/details', async (req, res) => {
 // API to retrieve a particular detail by ID
 app.get('/details/:id', async (req, res) => {
     try {
+        console.log(`Received request to retrieve detail with ID: ${req.params.id}`);
         let detail = await Detail.findById(req.params.id);
         if (!detail) {
+            console.log('Detail not found');
             return res.status(404).send({ error: 'Detail not found' });
         }
         let formattedDetail = {
@@ -362,9 +364,10 @@ app.get('/details/:id', async (req, res) => {
             info: detail.info,
             images: detail.images.map(image => `data:${image.contentType};base64,${image.data.toString('base64')}`),
         };
+        console.log('Retrieved detail successfully');
         res.send(formattedDetail);
     } catch (error) {
-        console.error('Error retrieving detail:', error); // Log the error details
+        console.error('Error retrieving detail:', error);
         res.status(500).send({ error: 'Failed to retrieve detail' });
     }
 });
@@ -372,6 +375,7 @@ app.get('/details/:id', async (req, res) => {
 // Search endpoint
 app.get('/search', async (req, res) => {
     try {
+        console.log('Received search request');
         let { name, price, description } = req.query;
         let searchCriteria = {};
 
@@ -388,9 +392,10 @@ app.get('/search', async (req, res) => {
         }
 
         let results = await Detail.find(searchCriteria);
+        console.log('Search completed successfully');
         res.send(results);
     } catch (error) {
-        console.error('Error searching details:', error); // Log the error details
+        console.error('Error searching details:', error);
         res.status(500).send({ error: 'Failed to search details' });
     }
 });
