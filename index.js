@@ -303,6 +303,7 @@ app.post('/details', upload.array('images', 3), async (req, res) => {
         let result = await detail.save();
         res.send(result);
     } catch (error) {
+        console.error('Error saving detail:', error); // Log the error details
         res.status(500).send({ error: 'Failed to save detail' });
     }
 });
@@ -324,6 +325,7 @@ app.get('/details', async (req, res) => {
         }));
         res.send(formattedDetails);
     } catch (error) {
+        console.error('Error retrieving details:', error); // Log the error details
         res.status(500).send({ error: 'Failed to retrieve details' });
     }
 });
@@ -355,6 +357,7 @@ app.get('/details/:id', async (req, res) => {
         };
         res.send(formattedDetail);
     } catch (error) {
+        console.error('Error retrieving detail:', error); // Log the error details
         res.status(500).send({ error: 'Failed to retrieve detail' });
     }
 });
@@ -380,6 +383,7 @@ app.get('/search', async (req, res) => {
         let results = await Detail.find(searchCriteria);
         res.send(results);
     } catch (error) {
+        console.error('Error searching details:', error); // Log the error details
         res.status(500).send({ error: 'Failed to search details' });
     }
 });
