@@ -374,25 +374,35 @@ app.get('/details/:id', async (req, res) => {
 // Search endpoint
 app.get('/search', async (req, res) => {
     try {
-        let { name, price, description } = req.query;
-        let searchCriteria = {};
+        const { propertyType, location } = req.query;
 
-        if (name) {
-            searchCriteria.name = new RegExp(name, 'i'); // Case insensitive regex search
+        // Build the query object
+        let query = {};
+        if (propertyType) {
+            query.name = propertyType;
+        }
+        if (location) {
+            query.location = location;
         }
 
-        if (price) {
-            searchCriteria.price = price;
-        }
+        // Execute the query
+        let results = await Detail.find(query);
+        let formattedResults = results.map((result) => ({
+            _id: result._id,
+            name: result.name,
+            price: result.price,
+            description: result.description,
+            phoneNumber: result.phoneNumber,
+            sqft: result.sqft,
+            bed: result.bed,
+            bath: result.bath,
+            location: result.location,
+            images: result.images.map(image => `data:${image.contentType};base64,${image.data.toString('base64')}`),
+        }));
 
-        if (description) {
-            searchCriteria.description = new RegExp(description, 'i'); // Case insensitive regex search
-        }
-
-        let results = await Detail.find(searchCriteria);
-        res.send(results);
+        res.send(formattedResults);
     } catch (error) {
-        res.status(500).send({ error: 'Failed to search details' });
+        res.status(500).send({ error: 'Failed to perform search' });
     }
 });
 
