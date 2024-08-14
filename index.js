@@ -209,10 +209,10 @@ dotenv.config();
 const app = express();
 
 const corsConfig = {
-    origin: 'https://room-rooster-kappa.vercel.app', // Ensure this matches your frontend URL
+    origin: "*", // Ensure this matches your frontend URL
     credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
 };
 
 app.use(cors(corsConfig));
