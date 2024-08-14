@@ -277,10 +277,54 @@ app.post('/login', async (req, res) => {
 });
 
 // API to insert all the details
+// app.post('/details', upload.array('images', 5), async (req, res) => {
+//     try {
+//         console.log('Received request to add details');
+        
+//         const images = req.files.map(file => ({
+//             data: file.buffer,
+//             contentType: file.mimetype,
+//         }));
+
+//         let detail = new Detail({
+//             name: req.body.name,
+//             price: req.body.price,
+//             description: req.body.description,
+//             phoneNumber: req.body.phoneNumber,
+//             sqft: req.body.sqft,
+//             bed: req.body.bed,
+//             bath: req.body.bath,
+//             ownername: req.body.ownername,
+//             deposit: req.body.deposit,
+//             FurnishedStatus: req.body.FurnishedStatus,
+//             Availability: req.body.Availability,
+//             Perferredfor: req.body.Perferredfor,
+//             ageofconstruction: req.body.ageofconstruction,
+//             info: req.body.info,
+//             location: req.body.location,
+//             images: images,
+//         });
+
+//         console.log('Detail object created, saving to database');
+
+//         let result = await detail.save();
+
+//         console.log('Detail saved successfully');
+//         res.send(result);
+//     } catch (error) {
+//         console.error('Error saving detail:', error);
+//         res.status(500).send({ error: 'Failed to save detail' });
+//     }
+// });
 app.post('/details', upload.array('images', 5), async (req, res) => {
     try {
         console.log('Received request to add details');
         
+        // Check if files were uploaded
+        if (!req.files || req.files.length === 0) {
+            return res.status(400).send({ error: 'No images were uploaded' });
+        }
+
         const images = req.files.map(file => ({
             data: file.buffer,
             contentType: file.mimetype,
@@ -305,11 +349,11 @@ app.post('/details', upload.array('images', 5), async (req, res) => {
             images: images,
         });
 
-        console.log('Detail object created, saving to database');
+        console.log('Detail object created:', detail);
 
         let result = await detail.save();
 
-        console.log('Detail saved successfully');
+        console.log('Detail saved successfully:', result);
         res.send(result);
     } catch (error) {
         console.error('Error saving detail:', error);
