@@ -277,7 +277,7 @@ app.post('/login', async (req, res) => {
 });
 
 // API to insert all the details
-app.post('/details', upload.array('images', 5), async (req, res) => {
+app.post('/dd', upload.array('images', 5), async (req, res) => {
     try {
         console.log('Received request to add details');
         
