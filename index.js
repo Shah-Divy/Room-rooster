@@ -312,8 +312,8 @@ app.post('/dd', upload.array('images', 5), async (req, res) => {
         console.log('Detail saved successfully');
         res.send(result);
     } catch (error) {
-        console.error('Error saving detail:', error);
-        res.status(500).send({ error: 'Failed to save detail' });
+        console.error('Error saving detail:', error.message, error.stack); // Log more details of the error
+        res.status(500).send({ error: 'Failed to save detail', details: error.message });
     }
 });
 
