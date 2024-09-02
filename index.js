@@ -276,16 +276,19 @@ app.post('/login', async (req, res) => {
     }
 });
 
-// API to insert all the details
 app.post('/dd', upload.array('images', 5), async (req, res) => {
     try {
         console.log('Received request to add details');
-        
+        console.log('Received files:', req.files);
+        console.log('Received body:', req.body);
+
+        // Process images
         const images = req.files.map(file => ({
             data: file.buffer,
             contentType: file.mimetype,
         }));
 
+        // Create new Detail object
         let detail = new Detail({
             name: req.body.name,
             price: req.body.price,
@@ -307,15 +310,17 @@ app.post('/dd', upload.array('images', 5), async (req, res) => {
 
         console.log('Detail object created, saving to database');
 
+        // Save to database
         let result = await detail.save();
 
         console.log('Detail saved successfully');
         res.send(result);
     } catch (error) {
-        console.error('Error saving detail:', error.message, error.stack); // Log more details of the error
-        res.status(500).send({ error: 'Failed to save detail', details: error.message });
+        console.error('Error saving detail:', error.message, error.stack);
+        res.status(500).json({ error: 'Failed to save detail', details: error.message });
     }
 });
+
 
 // API to retrieve all the details from the DB
 app.get('/details', async (req, res) => {
