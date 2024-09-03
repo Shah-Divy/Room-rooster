@@ -1,1 +1,4 @@
 .vercel
+
+# Ignore environment files
+.env
