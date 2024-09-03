@@ -406,6 +406,23 @@ app.get('/search', async (req, res) => {
     }
 });
 
+// API to delete the data from the database
+app.delete('/details/:id', async (req, res) => {
+    try {
+        const id = req.params.id;
+        const deletedDetail = await Detail.findByIdAndDelete(id);
+
+        if (!deletedDetail) {
+            return res.status(404).send({ error: 'Detail not found' });
+        }
+
+        res.send({ message: 'Detail deleted successfully', deletedDetail });
+    } catch (error) {
+        console.error('Error deleting detail:', error);
+        res.status(500).send({ error: 'Failed to delete detail' });
+    }
+});
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
