@@ -276,44 +276,42 @@ app.post('/login', async (req, res) => {
     }
 });
 
-// API to insert all the details
-app.post('/dd', upload.array('images', 5), async (req, res) => {
+app.post('/details', upload.array('images', 5), async (req, res) => {
     try {
-        console.log('Received request to add details');
-        
-        const images = req.files.map(file => ({
+        const { name, price, description, phoneNumber, sqft, bed, bath, info, ownername, FurnishedStatus, Perferredfor, ageofconstruction, deposit, Availability, location } = req.body;
+
+        // Process uploaded images
+        let images = req.files.map(file => ({
             data: file.buffer,
             contentType: file.mimetype,
         }));
 
+        // Create new Detail object
         let detail = new Detail({
-            name: req.body.name,
-            price: req.body.price,
-            description: req.body.description,
-            phoneNumber: req.body.phoneNumber,
-            sqft: req.body.sqft,
-            bed: req.body.bed,
-            bath: req.body.bath,
-            ownername: req.body.ownername,
-            deposit: req.body.deposit,
-            FurnishedStatus: req.body.FurnishedStatus,
-            Availability: req.body.Availability,
-            Perferredfor: req.body.Perferredfor,
-            ageofconstruction: req.body.ageofconstruction,
-            info: req.body.info,
-            location: req.body.location,
-            images: images,
+            name,
+            price,
+            description,
+            images,
+            phoneNumber,
+            sqft,
+            bed,
+            bath,
+            info,
+            ownername,
+            FurnishedStatus,
+            Perferredfor,
+            ageofconstruction,
+            deposit,
+            Availability,
+            location
         });
 
-        console.log('Detail object created, saving to database');
-
+        // Save the detail object to the database
         let result = await detail.save();
-
-        console.log('Detail saved successfully');
-        res.send(result);
+        res.status(201).send(result);
     } catch (error) {
-        console.error('Error saving detail:', error);
-        res.status(500).send({ error: 'Failed to save detail' });
+        console.error('Error creating new detail:', error);
+        res.status(500).send({ error: 'Failed to create new detail' });
     }
 });
 
