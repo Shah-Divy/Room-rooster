@@ -423,6 +423,54 @@ app.delete('/details/:id', async (req, res) => {
     }
 });
 
+// API to update a detail by ID
+app.put('/details/:id', upload.array('images', 5), async (req, res) => {
+    try {
+        const id = req.params.id;
+        const { name, price, description, phoneNumber, sqft, bed, bath, ownername, deposit, FurnishedStatus, Availability, Perferredfor, ageofconstruction, info, location } = req.body;
+
+        // Prepare new image data if images are uploaded
+        let images = req.files.map(file => ({
+            data: file.buffer,
+            contentType: file.mimetype,
+        }));
+
+        // Find and update the detail by ID
+        let updatedDetail = await Detail.findByIdAndUpdate(
+            id,
+            {
+                name,
+                price,
+                description,
+                phoneNumber,
+                sqft,
+                bed,
+                bath,
+                ownername,
+                deposit,
+                FurnishedStatus,
+                Availability,
+                Perferredfor,
+                ageofconstruction,
+                info,
+                location,
+                ...(images.length > 0 && { images }), // Update images only if new images are uploaded
+            },
+            { new: true } // Return the updated document
+        );
+
+        if (!updatedDetail) {
+            return res.status(404).send({ error: 'Detail not found' });
+        }
+
+        res.send(updatedDetail);
+    } catch (error) {
+        console.error('Error updating detail:', error);
+        res.status(500).send({ error: 'Failed to update detail' });
+    }
+});
+
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
