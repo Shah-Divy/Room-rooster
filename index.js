@@ -79,7 +79,7 @@ app.post('/login', async (req, res) => {
     }
 });
 
-app.post('/details', upload.array('images', 5), async (req, res) => {
+app.post('/post/details', upload.array('images', 5), async (req, res) => {
     try {
         const { name, price, description, phoneNumber, sqft, bed, bath, info, ownername, FurnishedStatus, Perferredfor, ageofconstruction, deposit, Availability, location } = req.body;
 
@@ -119,7 +119,7 @@ app.post('/details', upload.array('images', 5), async (req, res) => {
 });
 
 // API to retrieve all the details from the DB
-app.get('/details', async (req, res) => {
+app.get('/get-all-data/details', async (req, res) => {
     try {
         let details = await Detail.find();
         let formattedDetails = details.map((detail) => ({
@@ -141,7 +141,7 @@ app.get('/details', async (req, res) => {
 });
 
 // API to retrieve a particular detail by ID
-app.get('/details/:id', async (req, res) => {
+app.get('/get-data-idwise/details/:id', async (req, res) => {
     try {
         let detail = await Detail.findById(req.params.id);
         if (!detail) {
@@ -208,7 +208,7 @@ app.get('/search', async (req, res) => {
 });
 
 // API to delete the data from the database
-app.delete('/details/:id', async (req, res) => {
+app.delete('/delete/details/:id', async (req, res) => {
     try {
         const id = req.params.id;
         const deletedDetail = await Detail.findByIdAndDelete(id);
@@ -225,7 +225,7 @@ app.delete('/details/:id', async (req, res) => {
 });
 
 // API to update a detail by ID
-app.put('/details/:id', upload.array('images', 5), async (req, res) => {
+app.put('/update/details/:id', upload.array('images', 5), async (req, res) => {
     try {
         const id = req.params.id;
         const { name, price, description, phoneNumber, sqft, bed, bath, ownername, deposit, FurnishedStatus, Availability, Perferredfor, ageofconstruction, info, location } = req.body;
