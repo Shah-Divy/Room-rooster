@@ -132,6 +132,7 @@ app.get('/get-all-data/details', async (req, res) => {
             bed: detail.bed,
             bath: detail.bath,
             location: detail.location,
+            ownername: detail.ownername,
             images: detail.images.map(image => `data:${image.contentType};base64,${image.data.toString('base64')}`),
         }));
         res.send(formattedDetails);
